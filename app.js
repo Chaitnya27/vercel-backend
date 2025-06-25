@@ -21,7 +21,10 @@ const store = MongoStore.create({
 
 
 
-app.use(cors());
+app.use(cors({
+  origin: "https://vercel-frontend-silk-rho.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 
 app.use(
