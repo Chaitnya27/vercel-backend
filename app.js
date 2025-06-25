@@ -3,18 +3,39 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const path = require("path");
-
-
-
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const app = express();
-// const _dirname = path.resolve();
 
-// app.use(express.static(path.join(_dirname,"/frontend/dist")));
-// app.get("*",(_,res)=>{
-//   res.sendFile(path.resolve(_dirname,"frontend","dist","index.html"));
-// });
+
+const dbUrl = process.env.ATLASDB_URL
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: 'secret123'
+  },
+  touchAfter : 24 * 3600 , 
+})
+
+
+
+
+
 app.use(cors());
 app.use(express.json());
+
+app.use(
+  session({
+    secret: 'secret123',
+    resave: false,
+    saveUninitialized: false,
+    store,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
 
 
 const productRoutes = require("./routes/productRoutes");
@@ -28,6 +49,9 @@ app.use("/api/orders", orderRoutes);
 
 
 
+store.on("error", function (err) {
+  console.log(" Error in MONGO Session store:", err);
+});
 
 
 
@@ -46,7 +70,9 @@ app.get('/api/products', (req, res) => {
   ]);
 });
 
-mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/ecommerce")
+
+
+mongoose.connect(dbUrl)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
