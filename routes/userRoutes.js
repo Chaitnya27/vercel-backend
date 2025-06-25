@@ -21,7 +21,7 @@ router.post("/forgot-password", async (req, res) => {
   const token = crypto.randomBytes(20).toString("hex");
   resetTokens[token] = user._id;
 
-  k (simulate email): http://localhost:5173/reset-password/" + token);
+  // k (simulate email): http://localhost:5173/reset-password/" + token);
 
   res.json({ message: "Reset link sent to your email (simulated)", token });
 });
