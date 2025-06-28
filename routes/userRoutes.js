@@ -23,7 +23,12 @@ router.post("/forgot-password", async (req, res) => {
 
   // k (simulate email): http://localhost:5173/reset-password/" + token);
 
-  res.json({ message: "Reset link sent to your email (simulated)", token });
+ const resetLink = `https://vercel-frontend-silk-rho.vercel.app/reset-password/${token}`;
+res.json({
+  message: "Reset link sent to your email (simulated)",
+  resetLink
+});
+
 });
 
 // Reset Password: Use token to reset
