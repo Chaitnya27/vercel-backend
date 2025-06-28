@@ -50,6 +50,9 @@ app.use("/api/users", authRoutes);
 const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoutes);
 
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/users", userRoutes);
+
 
 
 store.on("error", function (err) {
